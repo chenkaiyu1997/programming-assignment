@@ -38,6 +38,38 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+	int instr_num;
+	sscanf(args, "si %d", &instr_num);
+	printf("excuting %d steps\n", instr_num);
+	cpu_exec(instr_num);
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	int i;
+	printf("dumping register file\n");
+	for (i = R_EAX; i <= R_EDI; i++) {
+		printf("%%%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
+	}
+	printf("%%eip: 0x%08x\n", cpu.eip);
+}
+
+static int cmd_x(char *args) {
+	int i, len, pos;
+	unsigned tmp = 0;
+	sscanf(args, "%d 0%*c%x", &len, &pos);
+	len *= 4;
+	printf("dumping %d values from memory starting at %d\n", len, pos);
+	for (i = 0; i < len; i++) {
+		tmp = tmp << 8 + (*(unsigned char *)hwa_to_va(pos + i));
+		if (i % 4 == 3) {
+			printf("0x%08x ", tmp);
+			tmp = 0
+		}
+	}
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -46,6 +78,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
+	{ "si", "si [num] means excute num steps", cmd_si},
+	{ "info", "info r means print the register file", cmd_info},
+	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x}
 
 	/* TODO: Add more commands */
 
