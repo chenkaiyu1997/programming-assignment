@@ -63,6 +63,7 @@ static int cmd_x(char *args) {
 	printf("dumping %d values from memory starting at 0x%08x\n", len, pos);
 	len *= 4;
 	for (i = 0; i < len; i++) {
+		Assert(pos < HW_MEM_SIZE, "physical address(0x%08x) is out of bound", pos);
 		tmp = (tmp << 8) + (*(unsigned char *)hwa_to_va(pos + i));
 		if (i % 4 == 3) {
 			printf("0x%08x\n", tmp);
