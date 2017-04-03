@@ -62,10 +62,10 @@ static int cmd_x(char *args) {
 	len *= 4;
 	printf("dumping %d values from memory starting at %d\n", len, pos);
 	for (i = 0; i < len; i++) {
-		tmp = tmp << 8 + (*(unsigned char *)hwa_to_va(pos + i));
+		tmp = (tmp << 8) + (*(unsigned char *)hwa_to_va(pos + i));
 		if (i % 4 == 3) {
 			printf("0x%08x ", tmp);
-			tmp = 0
+			tmp = 0;
 		}
 	}
 }
