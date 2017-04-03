@@ -60,12 +60,12 @@ static int cmd_x(char *args) {
 	int i, len, pos;
 	unsigned tmp = 0;
 	sscanf(args, "%d 0%*c%x", &len, &pos);
+	printf("dumping %d values from memory starting at 0x%08x\n", len, pos);
 	len *= 4;
-	printf("dumping %d values from memory starting at %d\n", len, pos);
 	for (i = 0; i < len; i++) {
 		tmp = (tmp << 8) + (*(unsigned char *)hwa_to_va(pos + i));
 		if (i % 4 == 3) {
-			printf("0x%08x ", tmp);
+			printf("0x%08x\n", tmp);
 			tmp = 0;
 		}
 	}
