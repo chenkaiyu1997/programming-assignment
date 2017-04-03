@@ -53,6 +53,7 @@ static int cmd_info(char *args) {
 		printf("%%%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
 	}
 	printf("%%eip: 0x%08x\n", cpu.eip);
+	return 0;
 }
 
 static int cmd_x(char *args) {
@@ -68,6 +69,7 @@ static int cmd_x(char *args) {
 			tmp = 0;
 		}
 	}
+	return 0;
 }
 
 static struct {
