@@ -7,10 +7,9 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
-
+	NOTYPE = 256, EQ,
+	NUM
 	/* TODO: Add more token types */
-
 };
 
 static struct rule {
@@ -21,10 +20,15 @@ static struct rule {
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
+	{" +",	NOTYPE},				
+	{"\\+", '+'},
+	{"-", '-'},
+	{"\\*", '*'},
+	{"\\/", '/'},
+	{"==", EQ}, 					
+	{"\\d+", NUM}
 
-	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -77,11 +81,23 @@ static bool make_token(char *e) {
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
-
+				tokens[nr_token].type = rules[i].token_type;
+				if (substr_len > 31) { //One byte for \0
+					printf("Ahh... Too long.");
+					return false;
+				}
 				switch(rules[i].token_type) {
+					case NUM:
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						break;
+					case NOTYPE:
+						nr_token --; //No record
+						break;
 					default: panic("please implement me");
 				}
 
+				nr_token ++;
 				break;
 			}
 		}
@@ -102,7 +118,71 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
-	return 0;
+	return eval(0, nr_token - 1, success);
+}
+
+
+int parse_num(char *s) {
+	int result = 0;
+	for (; *s; s++) {
+		result = result * 10 + (*s - '0');
+ 	}
+ 	return result;
+}
+
+bool check_parentheses(int p, int q) {
+	if(tokens[p].type != '(' || tokens[q].type != ')')
+		return false;
+	int cnt = 0
+	for(p++; p < q; p++) {
+		if (tokens[p].type == '(')
+			cnt ++;
+		else if (tokens[p].type == ')')
+			cnt --;
+		else if (cnt <= 0) // If something outside of parentheses
+			return false;
+	}
+	return cnt == 0;
+}
+
+int find_dominant_pos(int p, int q) {
+
+}
+int eval(int p, int q, bool *success) {
+	if (p > q) {
+		*success = false;
+		return 0;
+	}
+	else if (p == q) {
+		if (tokens[p].type != NUM) {
+			printf("Not Number ?!");
+			*success = false;
+			return 0;
+		}
+		return parse_num(tokens[p].str);
+	}
+	else if(check_parentheses(p, q)) {
+		return eval(p + 1, q - 1, success);
+	}
+	else {
+		int op = find_dominant_pos(p, q);
+		int val1 = eval(p, op - 1);
+		int val2 = eval(op + 1, q);
+
+		switch(tokens[op].type) {
+			case '+':
+				return val1 + val2;
+			case '-':
+				return val1 - val2;
+			case '*':
+				return val1 * val2;
+			case '/':
+				return val1 / val2;
+			default:
+				printf("No such type.");
+				*success = false;
+				return 0;
+		}
+	}
 }
 
