@@ -80,7 +80,7 @@ static int cmd_p(char *args) {
 		printf("%d\n", value);
 	}
 	else {
-		printf("Expression error!");
+		printf("Expression error!\n");
 	}
 	return 0;
 }
