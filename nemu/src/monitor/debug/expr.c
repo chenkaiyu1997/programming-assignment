@@ -132,6 +132,7 @@ static bool make_token(char *e) {
 						break;
 					default: ;
 				}
+				printf("%d ", tokens[nr_token].type);				
 				nr_token ++;
 				break;
 			}
