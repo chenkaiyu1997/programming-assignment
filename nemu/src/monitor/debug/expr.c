@@ -56,6 +56,8 @@ void init_regex() {
 typedef struct token {
 	int type;
 	char str[32];
+	int precedence;
+	int associate; // 0 -> left 1 -> right
 } Token;
 
 Token tokens[32];
@@ -83,6 +85,9 @@ static bool make_token(char *e) {
 				 * types of tokens, some extra actions should be performed.
 				 */
 				tokens[nr_token].type = rules[i].token_type;
+				tokens[nr_token].precedence = rules[i].precedence;
+				tokens[nr_token].associate = rules[i].associate;
+
 				if (substr_len > 31) { //One byte for \0
 					printf("Ahh... Too long.");
 					return false;
@@ -134,7 +139,7 @@ int parse_num(char *s) {
 bool check_parentheses(int p, int q) {
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
-	int cnt = 0
+	int cnt = 0;
 	for(p++; p < q; p++) {
 		if (tokens[p].type == '(')
 			cnt ++;
@@ -183,8 +188,8 @@ int eval(int p, int q, bool *success) {
 	}
 	else {
 		int op = find_dominant_pos(p, q);
-		int val1 = eval(p, op - 1);
-		int val2 = eval(op + 1, q);
+		int val1 = eval(p, op - 1, success);
+		int val2 = eval(op + 1, q, success);
 
 		switch(tokens[op].type) {
 			case '+':
