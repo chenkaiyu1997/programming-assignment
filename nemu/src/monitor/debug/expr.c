@@ -204,7 +204,7 @@ int get_reg(char *s, bool *success) {
 	return 0;
 }
 
-bool check_parentheses(int p, int q) {
+bool check_parentheses(int p, int q, bool *success) {
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
 	int cnt = 0;
@@ -213,9 +213,15 @@ bool check_parentheses(int p, int q) {
 			cnt ++;
 		else if (tokens[p].type == ')')
 			cnt --;
+		else if (cnt < 0) {
+			*success = false;
+			return false;
+		}
 		else if (cnt <= 0) // If something outside of parentheses
 			return false;
 	}
+	if (cnt != 0)
+		*success = false;
 	return cnt == 0;
 }
 
@@ -238,6 +244,8 @@ int find_dominant_pos(int p, int q) {
 }
 
 int eval(int p, int q, bool *success) {
+	if (*success == false)
+		return 0;
 	if (p > q) {
 		*success = false;
 		return 0;
@@ -255,7 +263,7 @@ int eval(int p, int q, bool *success) {
 		*success = false;
 		return 0;
 	}
-	else if(check_parentheses(p, q)) {
+	else if(check_parentheses(p, q, success)) {
 		return eval(p + 1, q - 1, success);
 	}
 	else if(tokens[p].type == REV) {
