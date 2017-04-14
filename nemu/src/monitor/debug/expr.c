@@ -117,6 +117,8 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+
+int eval(int p, int q, bool *success);
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -154,7 +156,7 @@ bool check_parentheses(int p, int q) {
 int find_dominant_pos(int p, int q) {
 	int ans = -1;
 	int cnt = 0;
-	for(p; p <= q; p++) {
+	for(; p <= q; p++) {
 		if (tokens[p].type == '(')
 			cnt ++;
 		else if (tokens[p].type == ')')
@@ -166,7 +168,7 @@ int find_dominant_pos(int p, int q) {
 				ans = p;
 		}
 	}
-	Assert(ans != -1 || tokens[ans].type == NUM, "dominate error!");
+	Assert(ans == -1, "dominate error!");
 	return ans;
 }
 
