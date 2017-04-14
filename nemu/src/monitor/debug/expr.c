@@ -234,7 +234,6 @@ int find_dominant_pos(int p, int q) {
 				ans = p;
 		}
 	}
-	Assert(ans != -1, "dominate error!");
 	return ans;
 }
 
