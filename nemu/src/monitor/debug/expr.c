@@ -179,6 +179,7 @@ int find_dominant_pos(int p, int q) {
 }
 
 int eval(int p, int q, bool *success) {
+	printf("%d %d", p, q);
 	if (p > q) {
 		*success = false;
 		return 0;
