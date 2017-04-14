@@ -157,7 +157,6 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_dominant_pos(int p, int q) {
-	printf("finding%d %d", p, q);
 	int ans = -1;
 	int cnt = 0;
 	for(; p <= q; p++) {
@@ -172,8 +171,7 @@ int find_dominant_pos(int p, int q) {
 				ans = p;
 		}
 	}
-	printf("%d", ans);	
-	Assert(ans == -1, "dominate error!");
+	Assert(ans != -1, "dominate error!");
 	return ans;
 }
 
