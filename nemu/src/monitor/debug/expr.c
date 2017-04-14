@@ -234,8 +234,6 @@ int find_dominant_pos(int p, int q) {
 				ans = p;
 		}
 	}
-	printf("DOM%d\n", ans);
-	printf("%d %d\n", tokens[1].precedence, tokens[2].precedence);
 	Assert(ans != -1, "dominate error!");
 	return ans;
 }
