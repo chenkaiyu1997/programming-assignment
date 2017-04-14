@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NEQ
+	NOTYPE = 256, EQ, NEQ,
 	NUM, NUM16,
 	REG, REF, REV,
 	AND, OR
@@ -123,11 +123,11 @@ static bool make_token(char *e) {
 						nr_token --; //No record
 						break;
 					case '-':
-						if (nr_token == 0 || is_op(tokens[nr_token - 1]))
+						if (nr_token == 0 || is_op(tokens[nr_token - 1].type))
 							tokens[nr_token].type = REV;
 						break;
 					case '*':
-						if (nr_token == 0 || is_op(tokens[nr_token - 1]))
+						if (nr_token == 0 || is_op(tokens[nr_token - 1].type))
 							tokens[nr_token].type = REF;
 						break;
 					default: ;
@@ -178,19 +178,19 @@ int parse_num16(char *s) {
 
 int get_reg(char *s, bool *success) {
 	s++;
-	if(strcmp(reg, "eip") == 0) 
+	if(strcmp(s, "eip") == 0) 
 		return cpu.eip;
 	int i;
 	for(i = 0; i < 8; i++)
-		if(strcmp(regsl[i], reg) == 0)
+		if(strcmp(regsl[i], s) == 0)
 			return reg_l(i);
 
 	for(i = 0; i < 8; ++i)
-		if(strcmp(regsw[i], reg) == 0)
+		if(strcmp(regsw[i], s) == 0)
 			return reg_w(i);
 
 	for(i = 0; i < 8; ++i)
-		if(strcmp(regsb[i], reg) == 0)
+		if(strcmp(regsb[i], s) == 0)
 			return reg_b(i);
 
 	*success = false;
@@ -244,7 +244,7 @@ int eval(int p, int q, bool *success) {
 			return parse_num16(tokens[p].str);
 		}
 		if (tokens[p].type == REG) {
-			return get_reg(tokens[p].str, *success);
+			return get_reg(tokens[p].str, success);
 		}
 		*success = false;
 		return 0;
