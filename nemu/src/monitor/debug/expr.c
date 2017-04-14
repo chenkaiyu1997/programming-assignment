@@ -15,19 +15,20 @@ enum {
 static struct rule {
 	char *regex;
 	int token_type;
+	int precedence;
+	int associate; // 0 -> left 1 -> right
 } rules[] = {
 
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
-	{" +",	NOTYPE},				
-	{"\\+", '+'},
-	{"-", '-'},
-	{"\\*", '*'},
-	{"\\/", '/'},
-	{"==", EQ}, 					
-	{"\\d+", NUM}
-
+	{" +",	NOTYPE, 0, 0},				
+	{"\\+", '+', 10, 0},
+	{"-", '-', 10, 0},
+	{"\\*", '*', 20, 0},
+	{"\\/", '/', 20, 0},
+	{"==", EQ, 5, 0}, 					
+	{"\\d+", NUM, 0, 0}
 
 };
 
@@ -146,8 +147,24 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_dominant_pos(int p, int q) {
-
+	int ans = -1;
+	int cnt = 0;
+	for(p; p <= q; p++) {
+		if (tokens[p].type == '(')
+			cnt ++;
+		else if (tokens[p].type == ')')
+			cnt --;
+		else if (cnt == 0 && (ans == -1 || tokens[p].precedence >= tokens[ans].precedence)) {
+			if (ans == -1 || tokens[p].precedence > tokens[ans].precedence) 
+				ans = p;
+			else if (tokens[p].associate == 1)
+				ans = p;
+		}
+	}
+	Assert(ans != -1 || tokens[ans].type == NUM, "dominate error!");
+	return ans;
 }
+
 int eval(int p, int q, bool *success) {
 	if (p > q) {
 		*success = false;
