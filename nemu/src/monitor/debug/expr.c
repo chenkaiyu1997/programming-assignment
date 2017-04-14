@@ -123,12 +123,18 @@ static bool make_token(char *e) {
 						nr_token --; //No record
 						break;
 					case '-':
-						if (nr_token == 0 || is_op(tokens[nr_token - 1].type))
+						if (nr_token == 0 || is_op(tokens[nr_token - 1].type)){
+							tokens[nr_token].precedence = 30;
+							tokens[nr_token].associate = 1;
 							tokens[nr_token].type = REV;
+						}
 						break;
 					case '*':
-						if (nr_token == 0 || is_op(tokens[nr_token - 1].type))
+						if (nr_token == 0 || is_op(tokens[nr_token - 1].type)){
+							tokens[nr_token].precedence = 30;
+							tokens[nr_token].associate = 1;
 							tokens[nr_token].type = REF;
+						}
 						break;
 					default: ;
 				}
@@ -229,6 +235,7 @@ int find_dominant_pos(int p, int q) {
 		}
 	}
 	printf("DOM%d\n", ans);
+	printf("%d %d\n", tokens[1].precedence, tokens[2].precedence);
 	Assert(ans != -1, "dominate error!");
 	return ans;
 }
