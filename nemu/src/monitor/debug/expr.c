@@ -115,11 +115,6 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
-	int j;
-	for (j = 0; j < nr_token; j++) {
-		printf("%d ", tokens[j].precedence);
-	}
-	fflush(stdout);
 	return true; 
 }
 
@@ -179,7 +174,6 @@ int find_dominant_pos(int p, int q) {
 }
 
 int eval(int p, int q, bool *success) {
-	printf("%d %d", p, q);
 	if (p > q) {
 		*success = false;
 		return 0;
