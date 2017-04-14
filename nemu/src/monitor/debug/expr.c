@@ -119,6 +119,7 @@ static bool make_token(char *e) {
 	for (j = 0; j < nr_token; j++) {
 		printf("%d ", tokens[j].precedence);
 	}
+	fflush(stdout);
 	return true; 
 }
 
