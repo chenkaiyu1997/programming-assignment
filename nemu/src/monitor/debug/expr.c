@@ -7,8 +7,10 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ,
-	NUM
+	NOTYPE = 256, EQ, NEQ
+	NUM, NUM16,
+	REG, REF, REV,
+	AND, OR
 	/* TODO: Add more token types */
 };
 
@@ -22,15 +24,27 @@ static struct rule {
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
+
 	{" +",	NOTYPE, 0, 0},				
+	{"==", EQ, 3, 0}, 					
+	{"!=", NEQ, 3, 0}, 				
+	{"&&", AND, 5, 0},
+	{"\\|\\|", OR, 4, 0},
+
 	{"\\+", '+', 10, 0},
 	{"-", '-', 10, 0},
 	{"\\(", '(', 0, 0},
 	{"\\)", ')', 0, 0},
 	{"\\*", '*', 20, 0},
 	{"\\/", '/', 20, 0},
-	{"==", EQ, 5, 0}, 					
-	{"[0-9]+", NUM, 0, 0}
+
+	{"0x[0-9a-fA-F]+", NUM16, 0, 0},
+	{"[0-9]+", NUM, 0, 0},
+	{"\\$[a-zA-Z]+",REG, 0, 0},
+
+	{"\\!", '!', 30, 1},
+	{"\\*", REF, 30, 1},
+	{"\\-", REV, 30, 1}
 
 };
 
@@ -65,6 +79,10 @@ typedef struct token {
 Token tokens[32];
 int nr_token;
 
+bool is_op(char ch) {
+	return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+}
+
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
@@ -96,15 +114,24 @@ static bool make_token(char *e) {
 				}
 				switch(rules[i].token_type) {
 					case NUM:
+					case NUM16:
+					case REG:
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						break;
 					case NOTYPE:
 						nr_token --; //No record
 						break;
+					case '-':
+						if (nr_token == 0 || is_op(tokens[nr_token - 1]))
+							tokens[nr_token].type = REV;
+						break;
+					case '*':
+						if (nr_token == 0 || is_op(tokens[nr_token - 1]))
+							tokens[nr_token].type = REF;
+						break;
 					default: ;
 				}
-
 				nr_token ++;
 				break;
 			}
@@ -135,8 +162,39 @@ int parse_num(char *s) {
 	int result = 0;
 	for (; *s; s++) {
 		result = result * 10 + (*s - '0');
- 	}
- 	return result;
+	}
+	return result;
+}
+
+int parse_num16(char *s) {
+	int result = 0;
+	for (; *s; s++) {
+		if (*s >= 'a')
+			*s -= 32;
+		result = result * 16 + ((*s >= 'A') ? (*s - 'A' + 10) : (*s - '0'));
+	}
+	return result;
+}
+
+int get_reg(char *s, bool *success) {
+	s++;
+	if(strcmp(reg, "eip") == 0) 
+		return cpu.eip;
+	int i;
+	for(i = 0; i < 8; i++)
+		if(strcmp(regsl[i], reg) == 0)
+			return reg_l(i);
+
+	for(i = 0; i < 8; ++i)
+		if(strcmp(regsw[i], reg) == 0)
+			return reg_w(i);
+
+	for(i = 0; i < 8; ++i)
+		if(strcmp(regsb[i], reg) == 0)
+			return reg_b(i);
+
+	*success = false;
+	return 0;
 }
 
 bool check_parentheses(int p, int q) {
@@ -179,15 +237,26 @@ int eval(int p, int q, bool *success) {
 		return 0;
 	}
 	else if (p == q) {
-		if (tokens[p].type != NUM) {
-			printf("Not Number ?!");
-			*success = false;
-			return 0;
+		if (tokens[p].type == NUM) {
+			return parse_num(tokens[p].str);
 		}
-		return parse_num(tokens[p].str);
+		if (tokens[p].type == NUM16) {
+			return parse_num16(tokens[p].str);
+		}
+		if (tokens[p].type == REG) {
+			return get_reg(tokens[p].str, *success);
+		}
+		*success = false;
+		return 0;
 	}
 	else if(check_parentheses(p, q)) {
 		return eval(p + 1, q - 1, success);
+	}
+	else if(tokens[p].type == REV) {
+		return -eval(p+1, q, success);
+	} 
+	else if(tokens[p].type == REF) {
+		return (int)swaddr_read(eval(p+1, q, success), 4);
 	}
 	else {
 		int op = find_dominant_pos(p, q);
@@ -204,7 +273,7 @@ int eval(int p, int q, bool *success) {
 			case '/':
 				return val1 / val2;
 			default:
-				printf("No such type.");
+				printf("No such type!!");
 				*success = false;
 				return 0;
 		}
