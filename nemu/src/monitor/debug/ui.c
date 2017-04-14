@@ -74,7 +74,7 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-	int success = 0;
+	bool success = 0;
 	int value = expr(args, &success);
 	if (success == 0) {
 		printf("%d\n", value);
@@ -95,7 +95,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "si [num] means excute num steps", cmd_si},
 	{ "info", "info r means print the register file", cmd_info},
-	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x}
+	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x},
 	{ "p", "p [expr] prints the result of the expr", cmd_p}
 
 	/* TODO: Add more commands */
