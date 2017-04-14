@@ -175,6 +175,7 @@ int parse_num(char *s) {
 
 int parse_num16(char *s) {
 	int result = 0;
+	s += 2;
 	for (; *s; s++) {
 		if (*s >= 'a')
 			*s -= 32;
