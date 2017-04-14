@@ -225,7 +225,7 @@ bool check_parentheses(int p, int q, bool *success) {
 	return cnt == 0;
 }
 
-int find_dominant_pos(int p, int q) {
+int find_dominant_pos(int p, int q, bool* success) {
 	int ans = -1;
 	int cnt = 0;
 	for(; p <= q; p++) {
@@ -240,6 +240,8 @@ int find_dominant_pos(int p, int q) {
 				ans = p;
 		}
 	}
+	if(ans == -1)
+		*success = false;
 	return ans;
 }
 
@@ -276,7 +278,7 @@ int eval(int p, int q, bool *success) {
 		return !eval(p + 1, q, success);
 	}
 	else {
-		int op = find_dominant_pos(p, q);
+		int op = find_dominant_pos(p, q, success);
 		int val1 = eval(p, op - 1, success);
 		int val2 = eval(op + 1, q, success);
 
