@@ -260,10 +260,13 @@ int eval(int p, int q, bool *success) {
 		return eval(p + 1, q - 1, success);
 	}
 	else if(tokens[p].type == REV) {
-		return -eval(p+1, q, success);
+		return -eval(p + 1, q, success);
 	} 
 	else if(tokens[p].type == REF) {
-		return (int)swaddr_read(eval(p+1, q, success), 4);
+		return (int)swaddr_read(eval(p + 1, q, success), 4);
+	}
+	else if(tokens[p].type == '!') {
+		return !eval(p + 1, q, success);
 	}
 	else {
 		int op = find_dominant_pos(p, q);
@@ -279,6 +282,14 @@ int eval(int p, int q, bool *success) {
 				return val1 * val2;
 			case '/':
 				return val1 / val2;
+			case AND:
+				return val1 && val2;
+			case OR:
+				return val1 || val2;
+			case EQ:
+				return val1 == val2;
+			case NEQ:
+				return val1 != val2;
 			default:
 				printf("No such type!!");
 				*success = false;
