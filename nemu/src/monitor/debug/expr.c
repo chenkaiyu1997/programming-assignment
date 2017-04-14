@@ -223,10 +223,11 @@ int find_dominant_pos(int p, int q) {
 		else if (cnt == 0 && (ans == -1 || tokens[p].precedence <= tokens[ans].precedence)) {
 			if (ans == -1 || tokens[p].precedence < tokens[ans].precedence) 
 				ans = p;
-			else if (tokens[p].associate == 1)
+			else if (tokens[p].associate == 0)
 				ans = p;
 		}
 	}
+	printf("Dom%d", ans);
 	Assert(ans != -1, "dominate error!");
 	return ans;
 }
