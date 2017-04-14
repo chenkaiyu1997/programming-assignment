@@ -100,7 +100,7 @@ static bool make_token(char *e) {
 					case NOTYPE:
 						nr_token --; //No record
 						break;
-					default: panic("please implement me");
+					default: ;
 				}
 
 				nr_token ++;
