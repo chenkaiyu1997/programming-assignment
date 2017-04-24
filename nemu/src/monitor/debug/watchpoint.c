@@ -49,7 +49,7 @@ void check_wp(int* nemu_state) {
 		bool success = true;
 		int new_value = expr(iter -> expr_string, &success);
 		if (new_value != iter -> value) {
-			nemu_state = 0;
+			*nemu_state = 0;
 			printf("%8x:\twatchpoint %d hit: the value of %s changed from %d to %d\n", cpu.eip, iter->NO, iter->expr_string, iter->value, new_value);
 			iter -> value = new_value;
 		}
