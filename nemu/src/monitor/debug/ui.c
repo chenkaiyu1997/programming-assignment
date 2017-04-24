@@ -47,12 +47,22 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-	int i;
-	printf("dumping register file\n");
-	for (i = R_EAX; i <= R_EDI; i++) {
-		printf("%%%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
+	char ch = 0;
+	sscanf(args, "%c", &ch);
+	if(ch == 'r') {
+		int i;
+		printf("dumping register file\n");
+		for (i = R_EAX; i <= R_EDI; i++) {
+			printf("%%%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
+		}
+		printf("%%eip: 0x%08x\n", cpu.eip);
 	}
-	printf("%%eip: 0x%08x\n", cpu.eip);
+	else if(ch == 'w') {
+		print_wp();
+	}
+	else {
+		printf("Command error!");
+	}
 	return 0;
 }
 
@@ -85,6 +95,22 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
+static int cmd_d(char *args) {
+	int num = -1;
+	sscanf(args, "%d", &num);
+	if(num < 0 || num >= 32) {
+		printf("Number Error!");
+		return 0;
+	}
+	delete_wp(num);
+	return 0;
+}
+
+static int cmd_w(char *args) {
+	new_wp(args);
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -97,6 +123,9 @@ static struct {
 	{ "info", "info r means print the register file", cmd_info},
 	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x},
 	{ "p", "p [expr] prints the result of the expr", cmd_p}
+	{ "w", "w [expr] creates a watchpoint", cmd_w}
+	{ "d", "d [num] deletes watchpoint NO.[num]", cmd_d}
+
 
 	/* TODO: Add more commands */
 
