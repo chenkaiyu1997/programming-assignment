@@ -6,7 +6,6 @@
 static WP wp_list[NR_WP];
 static WP *head, *free_;
 
-
 void new_wp(char *s) {
 	WP* tmp = free_;
 	strcpy(tmp->expr_string, s);
