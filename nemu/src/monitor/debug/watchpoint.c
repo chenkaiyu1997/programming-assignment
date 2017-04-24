@@ -7,21 +7,11 @@ static WP wp_list[NR_WP];
 static WP *head, *free_;
 
 
-
-// char expr_string[32];
-// int value;
-
-// void new_wp(char* ch);
-// void check_wp(int* state);
-// void delete_wp(int number);
-// void print_wp();
-
-
-void new_wp(char *expr) {
+void new_wp(char *s) {
 	WP* tmp = free_;
-	strcpy(tmp->expr_string, expr);
+	strcpy(tmp->expr_string, s);
 	bool success = true;
-	tmp->value = expr(args, &success);
+	tmp->value = expr(s, &success);
 	if (!success) {
 		printf("Expression error\n");
 		return;
@@ -60,7 +50,7 @@ void check_wp(int* nemu_state) {
 		int new_value = expr(iter -> expr_string, &success);
 		if (new_value != iter -> value) {
 			nemu_state = 0;
-			printf("%8x:\twatchpoint %d hit: the value of %s changed from %d to %d\n", cpu.eip, iter->NO, iter->expr_string, wp->value, new_value);
+			printf("%8x:\twatchpoint %d hit: the value of %s changed from %d to %d\n", cpu.eip, iter->NO, iter->expr_string, iter->value, new_value);
 			iter -> value = new_value;
 		}
 	}
@@ -71,8 +61,9 @@ void print_wp() {
 		printf("No watchpoint!");
 		return;
 	}
+	WP* iter;
 	for(iter = head; iter; iter = iter -> next) {
-		printf("watchpoint %d\texpr: %s\tvalue : %d\n", iter->NO, iter->expr_string, wp->value);
+		printf("watchpoint %d\texpr: %s\tvalue : %d\n", iter->NO, iter->expr_string, iter->value);
 	}
 	return;
 }

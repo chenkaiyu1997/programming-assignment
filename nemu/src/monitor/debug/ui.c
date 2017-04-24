@@ -122,8 +122,8 @@ static struct {
 	{ "si", "si [num] means excute num steps", cmd_si},
 	{ "info", "info r means print the register file", cmd_info},
 	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x},
-	{ "p", "p [expr] prints the result of the expr", cmd_p}
-	{ "w", "w [expr] creates a watchpoint", cmd_w}
+	{ "p", "p [expr] prints the result of the expr", cmd_p},
+	{ "w", "w [expr] creates a watchpoint", cmd_w},
 	{ "d", "d [num] deletes watchpoint NO.[num]", cmd_d}
 
 
