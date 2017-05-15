@@ -10,6 +10,15 @@
 #include "arith/mul.h"
 #include "arith/idiv.h"
 #include "arith/div.h"
+#include "arith/sub.h"
+
+
+#include "control/call.h"
+#include "control/test.h"
+#include "control/cmp.h"
+#include "control/push.h"
+#include "control/jcc.h"
+
 
 #include "logic/and.h"
 #include "logic/or.h"
@@ -25,3 +34,15 @@
 #include "misc/misc.h"
 
 #include "special/special.h"
+
+
+#include "arith/dec.h"
+#include "arith/inc.h"
+#include "arith/neg.h"
+#include "arith/imul.h"
+#include "arith/mul.h"
+#include "arith/idiv.h"
+#include "arith/div.h"
+
+#include "logic/and.h"
+#include "logic/or.h"
