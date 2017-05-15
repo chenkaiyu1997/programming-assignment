@@ -18,6 +18,9 @@
 #include "control/cmp.h"
 #include "control/push.h"
 #include "control/jcc.h"
+#include "control/jmp.h"
+#include "control/ret.h"
+#include "control/leave.h"
 
 
 #include "logic/and.h"
