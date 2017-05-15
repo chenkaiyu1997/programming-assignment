@@ -118,6 +118,29 @@ static int cmd_w(char *args) {
 	new_wp(args);
 	return 0;
 }
+bool get_fun(uint32_t, char*);
+static int cmd_bt(char *args){
+    if(args != NULL)
+        printf("(there is no need to input any arguments)\n");
+    uint32_t tmp = cpu.ebp;
+    uint32_t addr = cpu.eip;
+    char name[32];
+    int i = 0, j;
+    while(get_fun(addr, name)){
+        name[31] = '\0';
+        printf("#%02d  %08x in %s(",i++, addr, name);
+        for(j = 2; j < 6; ++j){
+            if(tmp + j * 4 > 0 && tmp + j * 4 < 0x8000000)
+                printf("%d, ", swaddr_read(tmp + j*4, 4));
+        }
+        if(tmp + j * 4 > 0 && tmp + j * 4 < 0x8000000)
+            printf("%d", swaddr_read(tmp + j * 4, 4));
+        printf(")\n");
+        addr = swaddr_read(tmp + 4, 4);
+        tmp = swaddr_read(tmp, 4);
+    }
+    return 0;
+}
 
 static struct {
 	char *name;
@@ -132,14 +155,15 @@ static struct {
 	{ "x", "x [num] [pos] prints the num values start from pos in the memory", cmd_x},
 	{ "p", "p [expr] prints the result of the expr", cmd_p},
 	{ "w", "w [expr] creates a watchpoint", cmd_w},
-	{ "d", "d [num] deletes watchpoint NO.[num]", cmd_d}
-
+	{ "d", "d [num] deletes watchpoint NO.[num]", cmd_d},
+    { "bt", "print backtrace of all stack frames.", cmd_bt}
 
 	/* TODO: Add more commands */
 
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
