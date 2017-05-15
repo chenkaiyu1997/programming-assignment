@@ -29,7 +29,7 @@ typedef union {
 
 	union{
 		struct{
-			  CF: 1;
+			uint32_t CF: 1;
 			uint32_t: 0;
 			uint32_t PF: 1;
 			uint32_t: 0;

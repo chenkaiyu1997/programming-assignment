@@ -1,9 +1,12 @@
-#ifndef __DEC_H__
-#define __DEC_H__
+#ifndef __TEST_H__
+#define __TEST_H__
 
-make_helper(dec_rm_b);
+make_helper(test_i2a_b);
+make_helper(test_i2rm_b);
+make_helper(test_r2rm_b);
 
-make_helper(dec_rm_v);
-make_helper(dec_r_v);
+make_helper(test_i2a_v);
+make_helper(test_i2rm_v);
+make_helper(test_r2rm_v);
 
 #endif

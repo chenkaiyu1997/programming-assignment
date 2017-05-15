@@ -1,18 +1,19 @@
 #include "cpu/exec/helper.h"
 
 #define DATA_BYTE 1
-#include "cmp-template.h"
+#include "call-template.h"
 #undef DATA_BYTE
 
 #define DATA_BYTE 2
-#include "cmp-template.h"
+#include "call-template.h"
 #undef DATA_BYTE
 
 #define DATA_BYTE 4
-#include "cmp-template.h"
+#include "call-template.h"
 #undef DATA_BYTE
+
 
 /* for instruction encoding overloading */
 
-make_helper_v(dec_rm)
-make_helper_v(dec_r)
+make_helper_v(call_i)
+make_helper_v(call_rm)

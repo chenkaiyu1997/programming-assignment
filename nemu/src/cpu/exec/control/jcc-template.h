@@ -1,20 +1,29 @@
 #include "cpu/exec/template-start.h"
 
-#define instr dec
+#define update_eip()\
+	cpu.eip += (int32_t)op_src->val;\
+	if(DATA_BYTE == 2) cpu.eip &= 0xffff;
 
-static void do_execute () {
-	DATA_TYPE result = op_src->val - 1;
-	OPERAND_W(op_src, result);
-
-	/* TODO: Update EFLAGS. */
-	panic("please implement me");
-
-	print_asm_template1();
-}
-
-make_instr_helper(rm)
-#if DATA_BYTE == 2 || DATA_BYTE == 4
-make_instr_helper(r)
+#if DATA_BYTE == 1
+#define CODE_LEN 2
+#endif
+#if DATA_BYTE == 2
+#define CODE_LEN 4
+#endif
+#if DATA_BYTE == 4
+#define CODE_LEN 6
 #endif
 
+#define instr je
+
+static void do_execute() {
+	if(cpu.ZF == 1) update_eip();
+	print_asm("je $0x%x", cpu.eip + CODE_LEN);
+}
+
+make_instr_helper(i)
+
+#undef instr
+
+#undef CODE_LEN
 #include "cpu/exec/template-end.h"

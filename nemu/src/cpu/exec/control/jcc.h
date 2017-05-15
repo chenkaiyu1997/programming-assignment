@@ -1,9 +1,7 @@
-#ifndef __DEC_H__
-#define __DEC_H__
+#ifndef __JCC_H__
+#define __JCC_H__
 
-make_helper(dec_rm_b);
-
-make_helper(dec_rm_v);
-make_helper(dec_r_v);
+make_helper(je_i_b);
+make_helper(je_i_v);
 
 #endif
