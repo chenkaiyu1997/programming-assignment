@@ -80,7 +80,7 @@ make_group(group4,
 /* 0xff */
 make_group(group5,
 		   inv, inv, call_rm_v, call_rm_v,
-		   inv, inv, push_rm_v, inv)
+		   jmp_rm_v, inv, push_rm_v, inv)
 
 make_group(group6,
 		   inv, inv, inv, inv,
@@ -94,8 +94,8 @@ make_group(group7,
 /* TODO: Add more instructions!!! */
 
 helper_fun opcode_table [256] = {
-/* 0x00 */	inv, inv, inv, inv,
-/* 0x04 */	inv, inv, inv, inv,
+/* 0x00 */	add_r2rm_b, add_r2rm_v, add_rm2r_b, add_rm2r_v,
+/* 0x04 */	add_i2a_b, add_i2a_v, inv, inv,
 /* 0x08 */	inv, inv, inv, inv,
 /* 0x0c */	inv, inv, inv, _2byte_esc,
 /* 0x10 */	inv, inv, inv, inv,
@@ -142,9 +142,9 @@ helper_fun opcode_table [256] = {
 /* 0xb4 */	mov_i2r_b, mov_i2r_b, mov_i2r_b, mov_i2r_b,
 /* 0xb8 */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v,
 /* 0xbc */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v,
-/* 0xc0 */	group2_i_b, group2_i_v, inv, inv,
+/* 0xc0 */	group2_i_b, group2_i_v, ret_i_v, ret,
 /* 0xc4 */	inv, inv, mov_i2rm_b, mov_i2rm_v,
-/* 0xc8 */	inv, inv, inv, inv,
+/* 0xc8 */	inv, leave, ret_i_v, ret,
 /* 0xcc */	int3, inv, inv, inv,
 /* 0xd0 */	group2_1_b, group2_1_v, group2_cl_b, group2_cl_v,
 /* 0xd4 */	inv, inv, nemu_trap, inv,
