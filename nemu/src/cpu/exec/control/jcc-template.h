@@ -56,7 +56,7 @@ make_instr_helper(i)
 
 static void do_execute() {
 	get_new_eip();
-	if(cpu.CF == 0) cpu.eip = new_eip;
+	if(cpu.OF != 0) cpu.eip = new_eip;
 }
 
 make_instr_helper(i)
