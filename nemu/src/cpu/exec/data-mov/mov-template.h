@@ -3,7 +3,7 @@
 #define instr mov
 
 static void do_execute() {
-	printf("%d", op_src->val);
+	printf("0x%x", op_src->val);
 	OPERAND_W(op_dest, op_src->val);
 	print_asm_template2();
 }
