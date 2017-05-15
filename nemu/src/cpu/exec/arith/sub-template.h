@@ -3,12 +3,11 @@
 #define instr sub
 
 static void do_execute() {
-	DATA_TYPE result = op_src->val - op_src-> val;
+	DATA_TYPE result = op_dest->val - op_src->val;
 	UPDATE_FLAGS(result) //Update PF ZF SF
 	cpu.CF = (op_dest->val > op_src->val) ? 0 : 1;
 	cpu.AF = (op_dest->val & 0x7) > (op_src->val & 0x7) ? 0 : 1;
 	cpu.OF = (MSB(op_dest->val) != MSB(op_src->val) && MSB(result) != MSB(op_dest->val));
-	printf("%d", result);
     OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
