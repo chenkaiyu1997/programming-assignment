@@ -6,8 +6,10 @@ static void do_execute () {
 	DATA_TYPE result = op_src->val + 1;
 	OPERAND_W(op_src, result);
 
-	/* TODO: Update EFLAGS. */
-	panic("please implement me");
+	UPDATE_FLAGS(result);
+	if( result == ~(-1 << DATA_BYTE) )
+		cpu.OF = 1;
+	else cpu.OF = 0;
 
 	print_asm_template1();
 }

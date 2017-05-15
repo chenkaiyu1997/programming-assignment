@@ -8,12 +8,9 @@ static void do_execute() {
     srcval >>= 32 - DATA_BYTE * 8;
     DATA_TYPE result = op_dest->val - srcval;
     UPDATE_FLAGS(result);
-    //CF: 借位
     cpu.CF = (op_dest->val > srcval) ? 0 : 1;
-    //AF: 低三位是否借位
     cpu.AF = (op_dest->val & 0x8) > (srcval & 0x8) ? 0 : 1;
-    //OF: overflow flag, 同号相减不会溢出;异号相减, 结果与被减数反号则溢出.
-    if( MSB(op_dest->val) != MSB(srcval) && MSB(result) != MSB(op_dest->val)) 
+    if( MSB(op_dest->val) != MSB(srcval) && MSB(result) != MSB(op_dest->val))
         cpu.OF = 1; 
     else cpu.OF = 0;
 	print_asm_template2();
