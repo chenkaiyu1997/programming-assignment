@@ -1,3 +1,5 @@
+#include <unitypes.h>
+#include <stdio.h>
 #include "nemu.h"
 
 #define ENTRY_START 0x100000
@@ -89,4 +91,6 @@ void restart() {
 
 	/* Initialize DRAM. */
 	init_ddr3();
+
+    cpu.eflags = 0x00000002;
 }
