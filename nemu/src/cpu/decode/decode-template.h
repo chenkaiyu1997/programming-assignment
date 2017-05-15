@@ -15,7 +15,7 @@ make_helper(concat(decode_i_, SUFFIX)) {
 	op_src->imm = instr_fetch(eip, DATA_BYTE);
 	op_src->val = op_src->imm;
 
-	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->imm);
+	printf("$0x%x\n", op_src->imm);
 
 #ifdef DEBUG
 	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->imm);
@@ -39,7 +39,7 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->simm >>= (32 - (DATA_BYTE<<3));
 	op_src->val = op_src->simm;
 
-	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->imm);
+	printf("$0x%x\n", op_src->imm);
 
 
 #ifdef DEBUG
