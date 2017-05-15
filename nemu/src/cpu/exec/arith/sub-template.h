@@ -6,9 +6,13 @@ static void do_execute() {
 	DATA_TYPE result = op_src->val - op_src-> val;
 	UPDATE_FLAGS(result) //Update PF ZF SF
 	cpu.CF = (op_dest->val > op_src->val) ? 0 : 1;
-	cpu.AF = (op_dest->val & 0x7) > (op_src->val & 0x7) ? 0 : 1;
-	cpu.OF = (MSB(op_dest->val) != MSB(op_src->val) && MSB(result) != MSB(op_dest->val));
-	OPERAND_W(op_dest, result);
+	//AF: 低三位是否借位
+	cpu.AF = (op_dest->val & 0x8) > (op_src->val & 0x8) ? 0 : 1;
+	//OF: overflow flag, 同号相减不会溢出;异号相减, 结果与被减数反号则溢出.
+	if( MSB(op_dest->val) != MSB(op_src->val) && MSB(result) != MSB(op_dest->val))
+		cpu.OF = 1;
+	else cpu.OF = 0;
+	OPERAND_W(op_dest, result); //先判断EFLAGS变化, 最后再改变op_dest的值
 	print_asm_template2();
 }
 
@@ -23,3 +27,4 @@ make_instr_helper(rm2r)
 
 
 #include "cpu/exec/template-end.h"
+
