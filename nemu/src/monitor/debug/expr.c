@@ -10,7 +10,7 @@ enum {
 	NOTYPE = 256, EQ, NEQ,
 	NUM, NUM16,
 	REG, REF, REV,
-	AND, OR
+	AND, OR, VAR
 	/* TODO: Add more token types */
 };
 
@@ -44,7 +44,8 @@ static struct rule {
 
 	{"\\!", '!', 30, 1},
 	{"\\*", REF, 30, 1},
-	{"\\-", REV, 30, 1}
+	{"\\-", REV, 30, 1},
+	{"[a-zA-Z_]+[a-zA-Z0-9_]*", VAR, 99, 0},     //variables
 
 };
 
@@ -151,6 +152,7 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+int get_var(char*);//用于查找变量
 
 int eval(int p, int q, bool *success);
 uint32_t expr(char *e, bool *success) {
@@ -276,6 +278,16 @@ int eval(int p, int q, bool *success) {
 	}
 	else if(tokens[p].type == '!') {
 		return !eval(p + 1, q, success);
+	}
+	else if(tokens[p].type == VAR){
+		//look it up in the symtab
+		int result = get_var(tokens[p].str);
+		if(result == -1){
+			*success = false;
+			printf("didn't find variable : %s\n", tokens[p].str);
+			return 1;
+		}
+		else return result;
 	}
 	else {
 		int op = find_dominant_pos(p, q, success);
