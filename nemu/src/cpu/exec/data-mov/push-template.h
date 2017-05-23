@@ -3,11 +3,11 @@
 #define instr push
 
 static void do_execute() {
-	int len;
-	len = (DATA_BYTE == 2 ? 2 : 4);
-	cpu.esp -= len;
-	swaddr_write(cpu.esp, DATA_BYTE, op_src->val);
-	print_asm_template1();
+    int len;
+    if(DATA_BYTE == 2) len = 2; else len = 4;
+    cpu.esp -= len;
+    swaddr_write(cpu.esp, len, op_src->val);
+    print_asm_template1();
 }
 
 make_instr_helper(i)
