@@ -57,7 +57,7 @@ void check_wp(int* nemu_state) {
 
 void print_wp() {
 	if (head == NULL) {
-		printf("No watchpoint!");
+		printf("No watchpoint!\n");
 		return;
 	}
 	WP* iter;

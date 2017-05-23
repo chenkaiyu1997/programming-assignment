@@ -280,7 +280,6 @@ int eval(int p, int q, bool *success) {
 		return !eval(p + 1, q, success);
 	}
 	else if(tokens[p].type == VAR){
-		//look it up in the symtab
 		int result = get_var(tokens[p].str);
 		if(result == -1){
 			*success = false;
