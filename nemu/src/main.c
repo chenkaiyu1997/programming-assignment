@@ -1,3 +1,4 @@
+#define DEBUG
 void init_monitor(int, char *[]);
 void reg_test();
 void restart();
