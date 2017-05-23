@@ -21,22 +21,23 @@ make_helper(concat(decode_i_, SUFFIX)) {
 	return DATA_BYTE;
 }
 
-#if DATA_BYTE == 1 || DATA_BYTE == 4
+#if DATA_BYTE == 1 || DATA_BYTE == 2 || DATA_BYTE == 4
 /* sign immediate */
 make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->type = OP_TYPE_IMM;
 
-	/* OK: Use instr_fetch() to read ``DATA_BYTE'' bytes of memory pointed
+	/* DONE: Use instr_fetch() to read ``DATA_BYTE'' bytes of memory pointed
 	 * by ``eip''. Interpret the result as an signed immediate, and assign
 	 * it to op_src->simm.
 	 *
 	op_src->simm = ???
 	 */
+	//panic("please implement me");
 	op_src->simm = instr_fetch(eip, DATA_BYTE);
 	op_src->simm <<= (32 - (DATA_BYTE<<3));
 	op_src->simm >>= (32 - (DATA_BYTE<<3));
-	op_src->val = op_src->simm;
 
+	op_src->val = op_src->simm;
 
 #ifdef DEBUG
 	snprintf(op_src->str, OP_STR_SIZE, "$0x%x", op_src->val);
