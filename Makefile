@@ -4,7 +4,7 @@
 
 CC := gcc
 LD := ld
-CFLAGS := -MMD -Wall -c
+CFLAGS := -MMD -Wall -Werror -c
 
 LIB_COMMON_DIR := lib-common
 NEWLIBC_DIR := $(LIB_COMMON_DIR)/newlib
@@ -53,7 +53,7 @@ clean: clean-cpp
 ##### some convinient rules #####
 
 USERPROG := obj/testcase/mov
-ENTRY := $(kernel_BIN)
+ENTRY := $(testcase_BIN)
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
