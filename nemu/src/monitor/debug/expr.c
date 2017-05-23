@@ -264,6 +264,15 @@ int eval(int p, int q, bool *success) {
 		if (tokens[p].type == REG) {
 			return get_reg(tokens[p].str, success);
 		}
+		if(tokens[p].type == VAR){
+			int result = get_var(tokens[p].str);
+			if(result == -1){
+				*success = false;
+				printf("can not find variable : %s\n", tokens[p].str);
+				return 1;
+			}
+			else return result;
+		}
 		*success = false;
 		return 0;
 	}
@@ -278,15 +287,6 @@ int eval(int p, int q, bool *success) {
 	}
 	else if(tokens[p].type == '!') {
 		return !eval(p + 1, q, success);
-	}
-	else if(tokens[p].type == VAR){
-		int result = get_var(tokens[p].str);
-		if(result == -1){
-			*success = false;
-			printf("didn't find variable : %s\n", tokens[p].str);
-			return 1;
-		}
-		else return result;
 	}
 	else {
 		int op = find_dominant_pos(p, q, success);
