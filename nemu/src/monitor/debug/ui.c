@@ -39,7 +39,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
-	int instr_num;
+	int instr_num = 0;
     printf("%d", sscanf(args, "%d", &instr_num));
 //	if(sscanf(args, "%d", &instr_num)==-1)
 //		instr_num = 1;
