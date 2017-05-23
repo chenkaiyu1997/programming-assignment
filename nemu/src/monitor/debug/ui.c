@@ -40,7 +40,7 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
 	int instr_num = 0;
-    printf("%d", sscanf(args, "%d", &instr_num));
+//    printf("%d", sscanf(args, "%d", &instr_num));
 //	if(sscanf(args, "%d", &instr_num)==-1)
 //		instr_num = 1;
 	printf("excuting %d steps\n", instr_num);
