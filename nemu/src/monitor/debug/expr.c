@@ -41,11 +41,11 @@ static struct rule {
 	{"0x[0-9a-fA-F]+", NUM16, 99, 0},
 	{"[0-9]+", NUM, 99, 0},
 	{"\\$[a-zA-Z]+",REG, 99, 0},
+	{"[a-zA-Z_]+[a-zA-Z0-9_]*", VAR, 99, 0},
 
 	{"\\!", '!', 30, 1},
 	{"\\*", REF, 30, 1},
 	{"\\-", REV, 30, 1},
-	{"[a-zA-Z_]+[a-zA-Z0-9_]*", VAR, 99, 0},     //variables
 
 };
 
@@ -116,6 +116,7 @@ static bool make_token(char *e) {
 				switch(rules[i].token_type) {
 					case NUM:
 					case NUM16:
+					case VAR:
 					case REG:
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
