@@ -9,10 +9,10 @@ static void do_execute() {
 	cpu.eip &= shift;//eip(& 0xffffffff) or ip(& 0x0000ffff)
 	cpu.esp -= 4;
 	swaddr_write(cpu.esp, 4, cpu.eip + DATA_BYTE + 1);// PUSH 返回地址
-	if(op_src->type == OP_TYPE_IMM) 
+	if(op_src->type == OP_TYPE_IMM)
 		cpu.eip += op_src->val;
-	else 
-		cpu.eip = (op_src->val & shift) - (DATA_BYTE + 1);	
+	else
+		cpu.eip = (op_src->val & shift) - (DATA_BYTE + 1);
     print_asm("call $0x%x", cpu.eip + DATA_BYTE + 1);
 	//print_asm_template1();
 }
