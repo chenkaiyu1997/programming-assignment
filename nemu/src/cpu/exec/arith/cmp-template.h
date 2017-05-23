@@ -4,7 +4,7 @@
 
 static void do_execute() {
     DATA_TYPE result = op_dest->val - op_src->val;
-    printf("Result!%d", result);
+    printf("Result!%d\n", result);
     UPDATE_FLAGS(result);
     cpu.CF = (((long long)op_dest->val - (long long)op_src->val) >> (8 * DATA_BYTE)) & 1;
     cpu.AF = (op_dest->val & 0x8) > (op_src->val & 0x8) ? 0 : 1;
