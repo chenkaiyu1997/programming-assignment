@@ -124,10 +124,10 @@ static int cmd_w(char *args) {
 	new_wp(args);
 	return 0;
 }
+
 bool get_fun(uint32_t, char*);
 static int cmd_bt(char *args){
-    if(args != NULL)
-        printf("(there is no need to input any arguments)\n");
+
     uint32_t tmp = cpu.ebp;
     uint32_t addr = cpu.eip;
     char name[32];
@@ -137,11 +137,9 @@ static int cmd_bt(char *args){
         printf("#%02d  %08x in %s(",i++, addr, name);
         for(j = 2; j < 6; ++j){
             if(tmp + j * 4 > 0 && tmp + j * 4 < 0x8000000)
-                printf("%d, ", swaddr_read(tmp + j*4, 4));
+                printf(" %d%c", swaddr_read(tmp + j*4, 4), j==5?')':',');
         }
-        if(tmp + j * 4 > 0 && tmp + j * 4 < 0x8000000)
-            printf("%d", swaddr_read(tmp + j * 4, 4));
-        printf(")\n");
+        printf("\n");
         addr = swaddr_read(tmp + 4, 4);
         tmp = swaddr_read(tmp, 4);
     }

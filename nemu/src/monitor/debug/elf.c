@@ -12,7 +12,6 @@ static int nr_symtab_entry;
 bool get_fun(uint32_t addr, char* funcname){
 	int i = 0;
 	for(i = 0; i < nr_symtab_entry; ++i){
-		//if( symtab[i].st_info == STT_FUNC && symtab[i].st_value < addr && symtab[i].st_value > value){
 		if( symtab[i].st_value < addr && addr < symtab[i].st_value + symtab[i].st_size){
 			strcpy(funcname, strtab + symtab[i].st_name);
 			return true;
