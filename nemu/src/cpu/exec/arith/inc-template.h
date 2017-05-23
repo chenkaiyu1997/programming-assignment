@@ -7,7 +7,7 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	UPDATE_FLAGS(result);
-	if( result == ~(-1 << DATA_BYTE) )
+	if( result == ~(-1ll << (8 * DATA_BYTE))  )
 		cpu.OF = 1;
 	else cpu.OF = 0;
 

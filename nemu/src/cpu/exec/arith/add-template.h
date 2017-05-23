@@ -8,7 +8,7 @@ static void do_execute() {
     cpu.AF = ((op_dest->val & 0x7) + (op_src->val & 0x7)) > 0x7 ? 0 : 1;
 
     if( MSB(op_dest->val) == MSB(op_src->val) && MSB(result) != MSB(op_dest->val))
-        cpu.OF = 1; 
+        cpu.OF = 1;
     else
         cpu.OF = 0;
 
