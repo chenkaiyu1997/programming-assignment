@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <nemu.h>
 
 void cpu_exec(uint32_t);
 
@@ -60,15 +61,15 @@ static int cmd_info(char *args) {
 		for (i = R_EAX; i <= R_EDI; i++) {
 			printf("%%%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
 		}
-		printf("eip\t0x%x\t%d\n",cpu.eip,cpu.eip);
-		printf("eflags\t0x%8x\t%d\n",cpu.eflags, cpu.eflags);
-		printf("CF\t%x\n",cpu.CF);
-		printf("PF\t%x\n",cpu.PF);
-		printf("ZF\t%x\n",cpu.ZF);
-		printf("SF\t%x\n",cpu.SF);
-		printf("IF\t%x\n",cpu.IF);
-		printf("DF\t%x\n",cpu.DF);
-		printf("OF\t%x\n",cpu.OF);
+		printf("%%eip: 0x%08x\n",cpu.eip);
+        printf("eflags: 0x%08x\n",cpu.eflags);
+		printf("CF: %x\n",cpu.CF);
+		printf("PF: %x\n",cpu.PF);
+		printf("ZF: %x\n",cpu.ZF);
+		printf("SF: %x\n",cpu.SF);
+		printf("IF: %x\n",cpu.IF);
+		printf("DF: %x\n",cpu.DF);
+		printf("OF: %x\n",cpu.OF);
 	}
 	else if(ch == 'w') {
 		print_wp();
