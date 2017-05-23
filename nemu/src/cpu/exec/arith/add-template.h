@@ -9,7 +9,6 @@ static void do_execute() {
     if( MSB(op_dest->val) == MSB(op_src->val) && MSB(result) != MSB(op_dest->val))
         cpu.OF = 1; 
     else cpu.OF = 0;
-    //CF: 
     if(MSB(result) != MSB(op_dest->val)) cpu.CF = 1;
     else cpu.CF = 0;
     OPERAND_W(op_dest, result);
