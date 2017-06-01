@@ -23,3 +23,14 @@ make_helper(lea) {
 	print_asm("leal %s,%%%s", op_src->str, regsl[m.reg]);
 	return 1 + len;
 }
+
+make_helper(cwd){
+	cpu.edx = (cpu.eax>>31 == 1 ? 0xffffffff : 0);
+	print_asm("cwd/cdq");
+	return 1;
+}
+
+make_helper(cld){
+	cpu.DF = 0;
+	return 1;
+}
