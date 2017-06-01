@@ -1,11 +1,11 @@
 #include "cpu/exec/template-start.h"
 
-#define instr add
+#define instr adc
 
 static void do_execute() {
-    DATA_TYPE result = op_dest->val + op_src->val;
+    DATA_TYPE result = op_dest->val + op_src->val + cpu.CF;
     UPDATE_FLAGS(result);
-    cpu.AF = ((op_dest->val & 0x7) + (op_src->val & 0x7)) > 0x7 ? 0 : 1;
+    cpu.AF = ((op_dest->val & 0x7) + (op_src->val & 0x7) + cpu.CF) > 0x7 ? 0 : 1;
 
     if( MSB(op_dest->val) == MSB(op_src->val) && MSB(result) != MSB(op_dest->val))
         cpu.OF = 1;
@@ -16,7 +16,7 @@ static void do_execute() {
     else
         cpu.CF = 0;
     OPERAND_W(op_dest, result);
-	  print_asm_template2();
+    print_asm_template2();
 }
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4

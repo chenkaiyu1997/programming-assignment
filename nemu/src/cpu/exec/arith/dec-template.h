@@ -7,7 +7,7 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	UPDATE_FLAGS(result);
-	if( result == ~(-1 << (DATA_BYTE - 1)) )
+	if( result == ~(-1 << (8 * DATA_BYTE - 1)) )
 		cpu.OF = 1;
 	else cpu.OF = 0;
 	print_asm_template1();
