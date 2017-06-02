@@ -53,7 +53,9 @@ clean: clean-cpp
 ##### some convinient rules #####
 
 USERPROG := obj/testcase/bubble-sort
-ENTRY := $(USERPROG)
+#ENTRY := $(USERPROG)
+ENTRY := $(kernel_BIN)
+
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry

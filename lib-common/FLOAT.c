@@ -1,32 +1,22 @@
 #include "FLOAT.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-    long long A = a;
-    long long B = b;
-    long long ans = A * B;
-    return ans>>16;
+	return (FLOAT)(((long long)a * (long long)b)>> 16);
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-    long long A = Fabs(a);
-    long long B = Fabs(b);
-    int c;
-    FLOAT ans = 0;;
-    A <<= 16;
-    B <<= 16;
-    c = 16;
-    while(A != 0) {
+    long long A = Fabs(a) << 16;
+    long long B = Fabs(b) << 16;
+    int c = 16;
+    FLOAT ans = 0;
+    for(; A; B>>=1, c--) {
         if (A >= B) {
             A = A - B;
             ans = ans | (1 << c);
         }
         if (c == 0) break;
-        B = B >> 1;
-        c --;
     }
-    if ((a < 0 &&  b > 0) || (a > 0 && b < 0)) ans = -ans;
+    if ((long long)a*(long long)b < 0) ans = -ans;
     return ans;
 }
 
@@ -47,30 +37,30 @@ FLOAT f2F(float a) {
 }
 
 FLOAT Fabs(FLOAT a) {
-    FLOAT result = a<0?-a:a;
-    return result;
+    return a < 0 ? -a : a;
 }
 
 FLOAT sqrt(FLOAT x) {
-    FLOAT dt, t = int2F(2);
+	FLOAT dt, t = int2F(2);
 
-    do {
-        dt = F_div_int((F_div_F(x, t) - t), 2);
-        t += dt;
-    } while(Fabs(dt) > f2F(1e-4));
+	do {
+		dt = F_div_int((F_div_F(x, t) - t), 2);
+		t += dt;
+	} while(Fabs(dt) > f2F(1e-4));
 
-    return t;
+	return t;
 }
 
 FLOAT pow(FLOAT x, FLOAT y) {
-    /* we only compute x^0.333 */
-    FLOAT t2, dt, t = int2F(2);
+	/* we only compute x^0.333 */
+	FLOAT t2, dt, t = int2F(2);
 
-    do {
-        t2 = F_mul_F(t, t);
-        dt = (F_div_F(x, t2) - t) / 3;
-        t += dt;
-    } while(Fabs(dt) > f2F(1e-4));
+	do {
+		t2 = F_mul_F(t, t);
+		dt = (F_div_F(x, t2) - t) / 3;
+		t += dt;
+	} while(Fabs(dt) > f2F(1e-4));
 
-    return t;
+	return t;
 }
+
